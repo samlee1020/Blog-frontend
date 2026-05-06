@@ -45,3 +45,5 @@ test-results
 # Deployment platform metadata
 .vercel
 .netlify
+
+update_aliyun_dist.sh

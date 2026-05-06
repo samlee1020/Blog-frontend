@@ -2,7 +2,7 @@ import { Mail, MapPin } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { siteApi } from '../../api/site'
 import { PageState } from '../../components/common/PageState'
-import { MarkdownRenderer } from '../../components/markdown/MarkdownRenderer'
+import { MarkdownWithOutline } from '../../components/markdown/MarkdownWithOutline'
 import type { ProfileView } from '../../types/domain'
 import { toAssetUrl } from '../../utils/asset'
 
@@ -28,7 +28,7 @@ export function AboutPage() {
   }, [])
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
+    <main className="mx-auto max-w-6xl px-4 py-10">
       <PageState loading={loading} error={error} onRetry={load}>
         {profile ? (
           <section className="rounded-lg border border-slate-200 bg-white p-8 shadow-sm">
@@ -55,7 +55,7 @@ export function AboutPage() {
               </div>
             ) : null}
             <div className="mt-8 border-t border-slate-100 pt-8">
-              <MarkdownRenderer content={profile.contentMarkdown} />
+              <MarkdownWithOutline content={profile.contentMarkdown} />
             </div>
           </section>
         ) : null}

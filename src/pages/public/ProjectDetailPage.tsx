@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Button } from 'antd'
 import { projectApi } from '../../api/projects'
 import { PageState } from '../../components/common/PageState'
-import { MarkdownRenderer } from '../../components/markdown/MarkdownRenderer'
+import { MarkdownWithOutline } from '../../components/markdown/MarkdownWithOutline'
 import type { ProjectView } from '../../types/domain'
 import { toAssetUrl } from '../../utils/asset'
 import { formatDate } from '../../utils/date'
@@ -32,7 +32,7 @@ export function ProjectDetailPage() {
   }, [load])
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
+    <main className="mx-auto max-w-6xl px-4 py-10">
       <PageState loading={loading} error={error} onRetry={load}>
         {project ? (
           <article className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
@@ -71,7 +71,7 @@ export function ProjectDetailPage() {
               </div>
               {project.contentMarkdown ? (
                 <div className="mt-10 border-t border-slate-100 pt-8">
-                  <MarkdownRenderer content={project.contentMarkdown} />
+                  <MarkdownWithOutline content={project.contentMarkdown} />
                 </div>
               ) : null}
             </div>

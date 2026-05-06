@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { articleApi } from '../../api/articles'
 import { PageState } from '../../components/common/PageState'
-import { MarkdownRenderer } from '../../components/markdown/MarkdownRenderer'
+import { MarkdownWithOutline } from '../../components/markdown/MarkdownWithOutline'
 import { CommentSection } from '../../components/public/CommentSection'
 import type { ArticleDetailView } from '../../types/domain'
 import { toAssetUrl } from '../../utils/asset'
@@ -32,7 +32,7 @@ export function ArticleDetailPage() {
   }, [load])
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
+    <main className="mx-auto max-w-6xl px-4 py-10">
       <PageState loading={loading} error={error} onRetry={load}>
         {article ? (
           <>
@@ -51,7 +51,7 @@ export function ArticleDetailPage() {
                 ))}
               </div>
               <div className="mt-10 border-t border-slate-100 pt-8">
-                <MarkdownRenderer content={article.contentMarkdown} />
+                <MarkdownWithOutline content={article.contentMarkdown} />
               </div>
             </article>
             <CommentSection slug={slug} />

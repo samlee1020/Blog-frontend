@@ -29,6 +29,7 @@ a {
   font-weight: 700;
   line-height: 1.3;
   margin: 1.6em 0 0.7em;
+  scroll-margin-top: 96px;
 }
 
 .markdown-body h1 {
