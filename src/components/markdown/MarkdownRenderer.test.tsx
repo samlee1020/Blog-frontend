@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { extractMarkdownHeadings, MarkdownRenderer } from './MarkdownRenderer'
 import { MarkdownWithOutline } from './MarkdownWithOutline'
@@ -24,15 +25,32 @@ describe('MarkdownRenderer', () => {
     expect(container.querySelector('.katex-display')).toBeInTheDocument()
   })
 
-  it('adds heading anchors and renders an outline', () => {
+  it('adds heading anchors and renders a collapsible outline', async () => {
+    const user = userEvent.setup()
     render(<MarkdownWithOutline content={'# Overview\n\n## Details\n\n### Details'} />)
 
     expect(screen.getByRole('heading', { name: 'Overview' })).toHaveAttribute('id', 'overview')
     expect(screen.getByRole('heading', { name: 'Details', level: 2 })).toHaveAttribute('id', 'details')
     expect(screen.getByRole('heading', { name: 'Details', level: 3 })).toHaveAttribute('id', 'details-2')
-    expect(screen.getByRole('navigation', { name: '文章目录' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Overview' })).toHaveAttribute('href', '#overview')
-    expect(screen.getAllByRole('link', { name: 'Details' })[1]).toHaveAttribute('href', '#details-2')
+
+    const outline = screen.getByRole('navigation', { name: '文章目录' })
+    expect(within(outline).getByRole('link', { name: 'Overview' })).toHaveAttribute('href', '#overview')
+    expect(within(outline).queryByRole('link', { name: 'Details' })).not.toBeInTheDocument()
+
+    await user.click(within(outline).getByRole('button', { name: '展开 Overview 的子目录' }))
+    expect(within(outline).getByRole('link', { name: 'Details' })).toHaveAttribute('href', '#details')
+
+    await user.click(within(outline).getByRole('button', { name: '展开 Details 的子目录' }))
+    expect(within(outline).getAllByRole('link', { name: 'Details' })[1]).toHaveAttribute('href', '#details-2')
+  })
+
+  it('uses the shallowest article heading level as the visible outline root', () => {
+    render(<MarkdownWithOutline content={'## Top\n\n### Child\n\n## Next'} />)
+
+    const outline = screen.getByRole('navigation', { name: '文章目录' })
+    expect(within(outline).getByRole('link', { name: 'Top' })).toHaveAttribute('href', '#top')
+    expect(within(outline).getByRole('link', { name: 'Next' })).toHaveAttribute('href', '#next')
+    expect(within(outline).queryByRole('link', { name: 'Child' })).not.toBeInTheDocument()
   })
 
   it('extracts headings while ignoring fenced code blocks', () => {
