@@ -53,6 +53,20 @@ describe('MarkdownRenderer', () => {
     expect(within(outline).queryByRole('link', { name: 'Child' })).not.toBeInTheDocument()
   })
 
+  it('resets expanded outline state when markdown content changes', async () => {
+    const user = userEvent.setup()
+    const { rerender } = render(<MarkdownWithOutline content={'# First\n\n## Child'} />)
+
+    await user.click(screen.getByRole('button', { name: '展开 First 的子目录' }))
+    expect(screen.getByRole('link', { name: 'Child' })).toBeInTheDocument()
+
+    rerender(<MarkdownWithOutline content={'# Second\n\n## Next'} />)
+
+    const outline = screen.getByRole('navigation', { name: '文章目录' })
+    expect(within(outline).getByRole('link', { name: 'Second' })).toHaveAttribute('href', '#second')
+    expect(within(outline).queryByRole('link', { name: 'Next' })).not.toBeInTheDocument()
+  })
+
   it('extracts headings while ignoring fenced code blocks', () => {
     expect(extractMarkdownHeadings('```ts\n# nope\n```\n\n## Real')).toEqual([
       { id: 'real', level: 2, text: 'Real' },

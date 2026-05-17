@@ -51,7 +51,7 @@ export function ArticleDetailPage() {
                 ))}
               </div>
               <div className="mt-10 border-t border-slate-100 pt-8">
-                <MarkdownWithOutline content={article.contentMarkdown} />
+                <MarkdownWithOutline key={article.slug || article.id} content={article.contentMarkdown} />
               </div>
             </article>
             <CommentSection slug={slug} />

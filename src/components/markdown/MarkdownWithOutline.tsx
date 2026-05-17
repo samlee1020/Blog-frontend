@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ChevronRight, ListTree } from 'lucide-react'
 import { extractMarkdownHeadings, MarkdownRenderer } from './MarkdownRenderer'
 import type { MarkdownHeading } from './MarkdownRenderer'
@@ -8,22 +8,30 @@ interface OutlineNode extends MarkdownHeading {
 }
 
 function buildOutlineTree(headings: MarkdownHeading[]) {
+  if (!headings.length) return []
+
+  const topLevel = Math.min(...headings.map((heading) => heading.level))
   const roots: OutlineNode[] = []
   const stack: OutlineNode[] = []
 
   for (const heading of headings) {
     const node: OutlineNode = { ...heading, children: [] }
 
+    if (node.level === topLevel) {
+      roots.push(node)
+      stack.length = 0
+      stack.push(node)
+      continue
+    }
+
     while (stack.length && stack[stack.length - 1].level >= node.level) {
       stack.pop()
     }
 
     const parent = stack[stack.length - 1]
-    if (parent) {
-      parent.children.push(node)
-    } else {
-      roots.push(node)
-    }
+    if (!parent) continue
+
+    parent.children.push(node)
 
     stack.push(node)
   }
@@ -78,6 +86,10 @@ export function MarkdownWithOutline({ content }: { content?: string | null }) {
   const headings = useMemo(() => extractMarkdownHeadings(content), [content])
   const outlineTree = useMemo(() => buildOutlineTree(headings), [headings])
   const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set())
+
+  useEffect(() => {
+    setExpandedIds(new Set())
+  }, [content])
 
   function toggleHeading(id: string) {
     setExpandedIds((current) => {
