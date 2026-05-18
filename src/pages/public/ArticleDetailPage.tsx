@@ -9,6 +9,8 @@ import type { ArticleDetailView } from '../../types/domain'
 import { toAssetUrl } from '../../utils/asset'
 import { formatDate } from '../../utils/date'
 
+const commentsAnchorId = 'comments'
+
 export function ArticleDetailPage() {
   const { slug = '' } = useParams()
   const [article, setArticle] = useState<ArticleDetailView | null>(null)
@@ -51,10 +53,14 @@ export function ArticleDetailPage() {
                 ))}
               </div>
               <div className="mt-10 border-t border-slate-100 pt-8">
-                <MarkdownWithOutline key={article.slug || article.id} content={article.contentMarkdown} />
+                <MarkdownWithOutline
+                  key={article.slug || article.id}
+                  content={article.contentMarkdown}
+                  extraItems={[{ id: commentsAnchorId, text: '评论' }]}
+                />
               </div>
             </article>
-            <CommentSection slug={slug} />
+            <CommentSection slug={slug} id={commentsAnchorId} />
           </>
         ) : null}
       </PageState>

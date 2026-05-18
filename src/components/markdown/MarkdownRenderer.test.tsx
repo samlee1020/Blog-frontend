@@ -53,6 +53,14 @@ describe('MarkdownRenderer', () => {
     expect(within(outline).queryByRole('link', { name: 'Child' })).not.toBeInTheDocument()
   })
 
+  it('appends optional extra outline items', () => {
+    render(<MarkdownWithOutline content={'## Top'} extraItems={[{ id: 'comments', text: '评论' }]} />)
+
+    const outline = screen.getByRole('navigation', { name: '文章目录' })
+    expect(within(outline).getByRole('link', { name: 'Top' })).toHaveAttribute('href', '#top')
+    expect(within(outline).getByRole('link', { name: '评论' })).toHaveAttribute('href', '#comments')
+  })
+
   it('resets expanded outline state when markdown content changes', async () => {
     const user = userEvent.setup()
     const { rerender } = render(<MarkdownWithOutline content={'# First\n\n## Child'} />)

@@ -8,7 +8,7 @@ import type { CommentView, PageResponse } from '../../types/domain'
 import { formatDateTime } from '../../utils/date'
 import { PageState } from '../common/PageState'
 
-export function CommentSection({ slug }: { slug: string }) {
+export function CommentSection({ slug, id }: { slug: string; id?: string }) {
   const { user } = useAuth()
   const [page, setPage] = useState(1)
   const [comments, setComments] = useState<PageResponse<CommentView> | null>(null)
@@ -45,7 +45,7 @@ export function CommentSection({ slug }: { slug: string }) {
   }
 
   return (
-    <section className="mt-12 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+    <section id={id} className="mt-12 scroll-mt-24 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-950">评论</h2>

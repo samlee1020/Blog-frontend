@@ -7,6 +7,11 @@ interface OutlineNode extends MarkdownHeading {
   children: OutlineNode[]
 }
 
+export interface OutlineExtraItem {
+  id: string
+  text: string
+}
+
 function buildOutlineTree(headings: MarkdownHeading[]) {
   if (!headings.length) return []
 
@@ -82,10 +87,17 @@ function OutlineItem({
   )
 }
 
-export function MarkdownWithOutline({ content }: { content?: string | null }) {
+export function MarkdownWithOutline({
+  content,
+  extraItems = [],
+}: {
+  content?: string | null
+  extraItems?: OutlineExtraItem[]
+}) {
   const headings = useMemo(() => extractMarkdownHeadings(content), [content])
   const outlineTree = useMemo(() => buildOutlineTree(headings), [headings])
   const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set())
+  const hasOutline = headings.length > 0 || extraItems.length > 0
 
   useEffect(() => {
     setExpandedIds(new Set())
@@ -110,7 +122,7 @@ export function MarkdownWithOutline({ content }: { content?: string | null }) {
       <div className="min-w-0">
         <MarkdownRenderer content={content} />
       </div>
-      {headings.length ? (
+      {hasOutline ? (
         <aside className="order-first border-b border-slate-100 pb-5 lg:order-none lg:border-b-0 lg:border-l lg:pb-0 lg:pl-5">
           <nav className="lg:sticky lg:top-24" aria-label="文章目录">
             <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
@@ -120,6 +132,16 @@ export function MarkdownWithOutline({ content }: { content?: string | null }) {
             <ol className="space-y-2 text-sm leading-6">
               {outlineTree.map((node) => (
                 <OutlineItem key={node.id} node={node} expandedIds={expandedIds} onToggle={toggleHeading} />
+              ))}
+              {extraItems.map((item) => (
+                <li key={item.id}>
+                  <div className="flex min-w-0 items-center gap-1">
+                    <span className="h-5 w-5 shrink-0" />
+                    <a className="block min-w-0 flex-1 truncate text-slate-500 hover:text-blue-700" href={`#${item.id}`} title={item.text}>
+                      {item.text}
+                    </a>
+                  </div>
+                </li>
               ))}
             </ol>
           </nav>
