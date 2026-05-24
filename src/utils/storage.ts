@@ -12,6 +12,10 @@ export function setStoredAuth(token: string, user: UserView) {
   localStorage.setItem(USER_KEY, JSON.stringify(user))
 }
 
+export function setStoredUser(user: UserView) {
+  localStorage.setItem(USER_KEY, JSON.stringify(user))
+}
+
 export function getStoredUser(): UserView | null {
   const raw = localStorage.getItem(USER_KEY)
   if (!raw) return null

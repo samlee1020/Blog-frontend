@@ -7,6 +7,7 @@ import type {
   ProfileView,
   SystemConfigView,
   TagView,
+  UserView,
   UserStatus,
 } from '../types/domain'
 
@@ -58,5 +59,8 @@ export const adminApi = {
   },
   changePassword(payload: { oldPassword: string; newPassword: string }) {
     return apiData<boolean>(http.patch('/admin/me/password', payload))
+  },
+  updateAdminProfile(payload: { nickname: string }) {
+    return apiData<UserView>(http.patch('/admin/me/profile', payload))
   },
 }

@@ -27,6 +27,7 @@ const menuItems = [
   { key: '/admin/profile', icon: <UserOutlined />, label: <Link to="/admin/profile">信息页</Link> },
   { key: '/admin/media', icon: <PictureOutlined />, label: <Link to="/admin/media">图片</Link> },
   { key: '/admin/settings', icon: <SettingOutlined />, label: <Link to="/admin/settings">系统</Link> },
+  { key: '/admin/account', icon: <UserOutlined />, label: <Link to="/admin/account">管理员信息</Link> },
 ]
 
 export function AdminLayout() {
@@ -53,7 +54,6 @@ export function AdminLayout() {
           <div className="text-sm text-slate-500">当前用户：{user?.nickname}</div>
           <div className="flex gap-2">
             <Button onClick={() => navigate('/')}>返回前台</Button>
-            <Button onClick={() => navigate('/admin/account/password')}>修改密码</Button>
             <Button danger onClick={() => void logout()}>
               退出
             </Button>

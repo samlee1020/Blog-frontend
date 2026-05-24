@@ -21,7 +21,7 @@ import { AdminCoverPage } from '../pages/admin/AdminCoverPage'
 import { AdminProfilePage } from '../pages/admin/AdminProfilePage'
 import { AdminMediaPage } from '../pages/admin/AdminMediaPage'
 import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage'
-import { AdminAccountPasswordPage } from '../pages/admin/AdminAccountPasswordPage'
+import { AdminAccountPage } from '../pages/admin/AdminAccountPage'
 import { AdminProjectsPage } from '../pages/admin/AdminProjectsPage'
 
 export function AppRoutes() {
@@ -54,7 +54,8 @@ export function AppRoutes() {
           <Route path="profile" element={<AdminProfilePage />} />
           <Route path="media" element={<AdminMediaPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
-          <Route path="account/password" element={<AdminAccountPasswordPage />} />
+          <Route path="account" element={<AdminAccountPage />} />
+          <Route path="account/password" element={<AdminAccountPage />} />
         </Route>
       </Route>
     </Routes>

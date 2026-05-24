@@ -1,10 +1,11 @@
-import { Button, Form, Input, Pagination, message } from 'antd'
+import { Button, Form, Input, Pagination, Tag, message } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { commentApi } from '../../api/comments'
 import { showApiError } from '../../api/http'
 import { useAuth } from '../../contexts/AuthContext'
 import type { CommentView, PageResponse } from '../../types/domain'
+import { ADMIN_USERNAME } from '../../utils/asset'
 import { formatDateTime } from '../../utils/date'
 import { PageState } from '../common/PageState'
 
@@ -80,7 +81,10 @@ export function CommentSection({ slug, id }: { slug: string; id?: string }) {
           {comments?.items.map((comment) => (
             <article key={comment.id} className="rounded-lg border border-slate-100 bg-slate-50 p-4">
               <div className="mb-2 flex items-center justify-between gap-3">
-                <strong className="text-sm text-slate-900">{comment.author.nickname || comment.author.username}</strong>
+                <div className="flex min-w-0 items-center gap-2">
+                  <strong className="truncate text-sm text-slate-900">{comment.author.nickname || comment.author.username}</strong>
+                  {comment.author.username === ADMIN_USERNAME ? <Tag color="blue">站长</Tag> : null}
+                </div>
                 <span className="text-xs text-slate-500">{formatDateTime(comment.createdAt)}</span>
               </div>
               <p className="whitespace-pre-wrap text-sm leading-6 text-slate-700">{comment.content}</p>

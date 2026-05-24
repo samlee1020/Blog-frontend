@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { authApi } from '../api/auth'
 import { setUnauthorizedHandler } from '../api/http'
 import type { LoginResult, UserView } from '../types/domain'
-import { clearStoredAuth, getStoredToken, getStoredUser, setStoredAuth } from '../utils/storage'
+import { clearStoredAuth, getStoredToken, getStoredUser, setStoredAuth, setStoredUser } from '../utils/storage'
 
 interface AuthContextValue {
   user: UserView | null
@@ -13,6 +13,7 @@ interface AuthContextValue {
   login: (username: string, password: string) => Promise<LoginResult>
   logout: () => Promise<void>
   refreshMe: () => Promise<void>
+  updateUser: (nextUser: UserView) => void
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -36,7 +37,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     try {
       const nextUser = await authApi.me()
-      setUser(nextUser)
+      const storedUser = getStoredUser()
+      const userForState = storedUser?.id === nextUser.id ? { ...nextUser, nickname: storedUser.nickname } : nextUser
+      setStoredUser(userForState)
+      setUser(userForState)
     } catch {
       clearAuth()
     } finally {
@@ -65,6 +69,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return result
   }, [])
 
+  const updateUser = useCallback((nextUser: UserView) => {
+    setStoredUser(nextUser)
+    setUser(nextUser)
+  }, [])
+
   const logout = useCallback(async () => {
     try {
       if (getStoredToken()) await authApi.logout()
@@ -83,8 +92,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       refreshMe,
+      updateUser,
     }),
-    [user, token, loading, login, logout, refreshMe],
+    [user, token, loading, login, logout, refreshMe, updateUser],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
