@@ -6,7 +6,7 @@ import { articleApi, type ArticlePayload } from '../../api/articles'
 import { showApiError } from '../../api/http'
 import { siteApi } from '../../api/site'
 import { ImageUploadField } from '../../components/admin/ImageUploadField'
-import { markdownRehypePlugins, markdownRemarkPlugins } from '../../components/markdown/options'
+import { markdownEditorRehypePlugins, markdownRemarkPlugins } from '../../components/markdown/options'
 import type { ArticleStatus, CategoryView, TagView } from '../../types/domain'
 
 export function AdminArticleEditorPage() {
@@ -87,7 +87,7 @@ export function AdminArticleEditorPage() {
               previewOptions={{
                 className: 'markdown-body',
                 remarkPlugins: markdownRemarkPlugins,
-                rehypePlugins: markdownRehypePlugins,
+                rehypePlugins: markdownEditorRehypePlugins,
               }}
             />
           </div>

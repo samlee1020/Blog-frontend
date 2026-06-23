@@ -25,6 +25,21 @@ describe('MarkdownRenderer', () => {
     expect(container.querySelector('.katex-display')).toBeInTheDocument()
   })
 
+  it('highlights fenced code blocks with Prism tokens', () => {
+    const { container } = render(<MarkdownRenderer content={'```ts\nconst answer = 42\n```'} />)
+
+    expect(container.querySelector('pre code.language-ts')).toBeInTheDocument()
+    expect(container.querySelector('.token.keyword')).toHaveTextContent('const')
+    expect(container.querySelector('.token.number')).toHaveTextContent('42')
+  })
+
+  it('keeps soft line breaks inside blockquotes for styling', () => {
+    const { container } = render(<MarkdownRenderer content={'> 第一行\n> 第二行\n> 第三行'} />)
+
+    const quoteParagraph = container.querySelector('blockquote p')
+    expect(quoteParagraph?.textContent).toBe('第一行\n第二行\n第三行')
+  })
+
   it('adds heading anchors and renders a collapsible outline', async () => {
     const user = userEvent.setup()
     render(<MarkdownWithOutline content={'# Overview\n\n## Details\n\n### Details'} />)

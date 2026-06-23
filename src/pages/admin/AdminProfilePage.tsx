@@ -5,7 +5,7 @@ import { adminApi } from '../../api/admin'
 import { showApiError } from '../../api/http'
 import { ImageUploadField } from '../../components/admin/ImageUploadField'
 import { LinkListEditor } from '../../components/admin/LinkListEditor'
-import { markdownRehypePlugins, markdownRemarkPlugins } from '../../components/markdown/options'
+import { markdownEditorRehypePlugins, markdownRemarkPlugins } from '../../components/markdown/options'
 import type { ProfileView } from '../../types/domain'
 
 export function AdminProfilePage() {
@@ -49,7 +49,7 @@ export function AdminProfilePage() {
               previewOptions={{
                 className: 'markdown-body',
                 remarkPlugins: markdownRemarkPlugins,
-                rehypePlugins: markdownRehypePlugins,
+                rehypePlugins: markdownEditorRehypePlugins,
               }}
             />
           </div>

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { showApiError } from '../../api/http'
 import { projectApi } from '../../api/projects'
 import { ImageUploadField } from '../../components/admin/ImageUploadField'
-import { markdownRehypePlugins, markdownRemarkPlugins } from '../../components/markdown/options'
+import { markdownEditorRehypePlugins, markdownRemarkPlugins } from '../../components/markdown/options'
 import type { PageResponse, ProjectPayload, ProjectStatus, ProjectView } from '../../types/domain'
 import { formatDateTime } from '../../utils/date'
 
@@ -189,7 +189,7 @@ export function AdminProjectsPage() {
                 previewOptions={{
                   className: 'markdown-body',
                   remarkPlugins: markdownRemarkPlugins,
-                  rehypePlugins: markdownRehypePlugins,
+                  rehypePlugins: markdownEditorRehypePlugins,
                 }}
               />
             </div>
